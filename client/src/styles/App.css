@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+   }
+
+html,body {
+    font-family: 'Droid Serif', 'Roboto', 'Lato', serif;
+    color: white;
+    background-color: black;
+   }
+
+.bg-image{
+    background-image: url('../images/toronto-wallpaper2.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    box-shadow: 0 0 500px 20px rgba(10, 25, 34,0.7) inset;
+    height: 60vh;
+}
+
+.row{
+    height: 40vh;
+}
