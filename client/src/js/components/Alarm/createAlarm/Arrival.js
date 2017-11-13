@@ -32,14 +32,15 @@ export default class Arrival extends Component {
     handleTime = (e, payload) => {
         const {onSelectAnswer}  = this.props;
        
-        const now = moment().utc().valueOf()
-        const desiredArv = moment(payload).utc().valueOf()
+        const now = moment().valueOf()
+        const desiredArv = moment(payload).valueOf()
+        
+        const offSet = moment(payload).utcOffset()
+        const fromUTC = moment.utc(desiredArv).local();
 
         if (desiredArv < now) {
-            const offSet = moment(payload).utcOffset()
-            const fromUTC = moment.utc(desiredArv).local();
             const tomorrow = moment(moment(moment((moment(fromUTC).utcOffset(offSet))).toArray()).add(1, 'days')).toISOString()
-            const tomorrowUTC = moment(tomorrow).utc().valueOf();
+            const tomorrowUTC = moment(tomorrow).unix();
             
             this.setState({
                 arvTime:{
@@ -49,13 +50,14 @@ export default class Arrival extends Component {
             }, onSelectAnswer(tomorrowUTC) )
 
         } else {
-
+            const todayUTC = moment(fromUTC).unix();
+    
             this.setState({
                 arvTime:{
                     initial: payload,
-                    UTC: desiredArv
+                    UTC: todayUTC
                 }
-            }, onSelectAnswer(desiredArv))
+            }, onSelectAnswer(todayUTC))
         }
     }
 

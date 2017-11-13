@@ -18,7 +18,7 @@ function AlarmList({alarms, createAlarm, handleAddAlarm, currentLocation, handle
                 
                   alarms.length !== 0 ?
                     alarms.map((alarm, index )=> {
-                    return <AlarmCard key={index} alarms={alarms}/> 
+                    return <AlarmCard key={index} index={index} alarms={alarms}/> 
                   })
 
                   :

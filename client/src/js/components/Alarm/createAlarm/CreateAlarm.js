@@ -51,12 +51,12 @@ export default class CreateAlarm extends Component {
         .then(result=>{
             let ballpark  = result.data.rows[0].elements[0].duration.value;
             let inTraffic = result.data.rows[0].elements[0].duration_in_traffic.value;
-            console.log(result.data)
-          this.setState({
-              trafficResults:{
+            
+            this.setState({
+                trafficResults:{
                   ballpark: ballpark, 
                   inTraffic: inTraffic}
-          })
+            })
 
         }).catch(err=>{
             this.setState({
@@ -111,6 +111,20 @@ export default class CreateAlarm extends Component {
         
     }
 
+    clearState = ()=> {
+        console.log('clearing state')
+        this.setState({
+            allAnswers: [],
+            allQuestions: data.allQuestions,
+            currentQuestion: data.allQuestions[0],
+            error: false,
+            loadNextQuestion: false,
+            progress: 0,
+            showDetails: false,
+            trafficResults: {}
+        })
+    }
+
     render() {
         const {currentQuestion, showDetails, allQuestions, allAnswers, error, trafficResults} = this.state;
         const {handleSetAlarm} = this.props;
@@ -130,6 +144,7 @@ export default class CreateAlarm extends Component {
                              handleSetAlarm={handleSetAlarm}
                              error={error}
                              trafficResults={trafficResults}
+                             clearState={this.clearState}
                     />
                     }
                 </div>

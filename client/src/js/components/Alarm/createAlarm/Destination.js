@@ -8,7 +8,7 @@ import TextField from 'material-ui/TextField';
 
 // import axios from 'axios'
 
-const google = window.google;
+let google = window.google || null;
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -25,33 +25,30 @@ export default class Destination extends Component {
             value: ''
         }
     }
-    initAutocomplete = () => {
-        const {onSelectAnswer} = this.props;
 
+    componentDidMount() {
+        const {onSelectAnswer} = this.props;
+        
         const destinationInput = document.getElementById(`destination`);
         const autocomplete = new google.maps.places.Autocomplete((destinationInput), {
-            // types: ['geocode'],
+                // types: ['geocode'],
         });
-
-        google.maps.event.clearInstanceListeners(destinationInput);
         
+        //clear instance causing a glitch temporarily disabled until fix found 
+        // google.maps.event.clearInstanceListeners(destinationInput);
+                
         google.maps.event.addListener(autocomplete, 'place_changed', () => {
             const place = autocomplete.getPlace();
-            
+                    
             const  destination = {
-                    address: place.formatted_address,
+                address: place.formatted_address,
                     lat:     place.geometry.location.lat(),
                     lng:     place.geometry.location.lng(),
                 }
-
+        
             //change question after place is selected
             onSelectAnswer(destination)
         })
-    }
-
-    componentDidMount() {
-        this.initAutocomplete();
-
     }
 
     render() {

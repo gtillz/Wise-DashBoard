@@ -8,10 +8,9 @@ export default class Details extends Component {
     selectDetailElement = (elementType) => {
         const {allAnswers} = this.props;
         const isHour = (allAnswers[2].value >= 1);
-
         const renderDetail = {
             'destination': <span>{allAnswers[0].address}</span>,
-            'arrival'    : <span>{moment(allAnswers[1]).format('LLLL')}</span>,
+            'arrival'    : <span>{moment.unix(allAnswers[1]).format('LLLL')}</span>,
             'routine'    : <span>{`${isHour ? allAnswers[2].value : allAnswers[2].value * 60} ${isHour ? (allAnswers[2].value === 1) ? 'hour' : 'hours' : 'minutes'}`}</span>
         }
         
@@ -27,6 +26,16 @@ export default class Details extends Component {
         }
     
         return true;
+    }
+
+    onSubmit = ()=> {
+        const {handleSetAlarm, clearState, allAnswers, trafficResults} = this.props;
+        //sets alarm
+        handleSetAlarm(allAnswers, trafficResults);
+        //clears createAlarm State
+        
+        clearState();
+
     }
 
     render() {
@@ -45,7 +54,7 @@ export default class Details extends Component {
                         <p>An error has occurred... Please try again.</p>
                     }
                 </ol>
-                <button onClick={()=> handleSetAlarm(allAnswers, trafficResults)} disabled={isDisabled}>Set</button>
+                <button onClick={()=> this.onSubmit()} disabled={isDisabled}>Set</button>
             </div>
         )
     }
@@ -56,5 +65,6 @@ Details.propTypes = {
     handleSetAlarm: PropTypes.func.isRequired,
     error: PropTypes.bool.isRequired,
     trafficResults: PropTypes.object,
+    clearState: PropTypes.func.isRequired,
 }
 

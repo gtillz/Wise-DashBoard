@@ -32,7 +32,7 @@ app.post('/setAlarm', (req, res) => {
     // //request to get BallPark duration time
     request(url, (err, resp, body) => {
         let durBP = (JSON.parse(body).rows[0].elements[0].duration.value);
-        let DTc = (moment.unix((arvTime / 1000) - durBP).valueOf())+ (600000 * 6 * 4); //<--adds 4 hours(in milliseconds)to convert from EDT to UTC
+        let DTc = arvTime - durBP
     // //request for duration with traffic     
         if (!err) {
             function traffic() {
@@ -40,12 +40,15 @@ app.post('/setAlarm', (req, res) => {
                 let url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + callStr + YOUR_API_KEY;
                 request(url, (error, response, body) => {
                     if (!error) {
-                        let durNext = (JSON.parse(body).rows[0].elements[0].duration_in_traffic.value);
-                        if (Math.abs(durBP - durNext) > 60) {
-                            DTc = (moment.unix((arvTime / 1000) - durNext)).valueOf()+ (600000 * 6 * 4);
-                            durBP = durNext;
-                            traffic();
-                        } else res.send(body);
+                        // let durInTraffic = (JSON.parse(body).rows[0].elements[0].duration_in_traffic.value);
+                        // if (Math.abs(durBP - durInTraffic) > 60 && count < 3) {
+                        //     count += 1;
+                        //     console.log(count)
+                        //     DTc = (moment.unix(arvTime - durInTraffic)) + (600000 * 6 * 4);
+                        //     durBP = durInTraffic;
+                        //     traffic();
+                        // } else 
+                    res.send(body)
                     } else res.status(500).json({error:'Please enter a valid address.'});
                 });
                 return;

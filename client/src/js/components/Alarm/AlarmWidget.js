@@ -33,11 +33,18 @@ export default class AlarmWidget extends Component {
       obj[i] = item 
       return obj
     }, {})
-    
-    alarm = Object.assign(alarm, trafficResults)
-    // this.setState({
-    //   alarms: [...this.state.alarms, alarm]
-    // })
+
+    const awake = {
+      time: allAnswers[1] - trafficResults.inTraffic - (allAnswers[2].value * 3600),
+      ballpark: trafficResults.ballpark,
+      inTraffic: trafficResults.inTraffic
+    }
+
+    alarm = Object.assign(alarm, awake)
+
+    this.setState({
+      alarms: [...this.state.alarms, alarm]
+    }, this.handleAddAlarm)
 
   }
 
