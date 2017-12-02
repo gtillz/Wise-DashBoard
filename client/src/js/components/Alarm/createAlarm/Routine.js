@@ -42,10 +42,10 @@ export default class Routine extends Component {
         return (
             <div>
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <div>
+                    <div className='slider-container'>
                         <h6>{`${isHour ? routine.value : routine.value * 60} ${isHour ? (routine.value === 1) ? 'hour' : 'hours' : 'minutes'}`}</h6>
                         <Slider
-                            style={{width: '75%'}}
+                            style={{margin: '1em auto', width: '75%'}}
                             min={0}
                             max={2}
                             step={25/100}

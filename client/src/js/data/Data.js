@@ -6,7 +6,7 @@ const data = {
             "elementType": "destination",
         },   
         {
-            "question": "What Time Should You Be There?",
+            "question": "What Time Would You Like To Arrive?",
             "elementType": "arrival"
         },
         {

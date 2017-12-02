@@ -47,7 +47,7 @@ export default class CreateAlarm extends Component {
             ETA: allAnswers[1]
         }
         
-        axios.post('http://localhost:8080/setAlarm', alarmData)
+        axios.post('http://localhost:8080/set', alarmData)
         .then(result=>{
             let ballpark  = result.data.rows[0].elements[0].duration.value;
             let inTraffic = result.data.rows[0].elements[0].duration_in_traffic.value;
@@ -84,10 +84,12 @@ export default class CreateAlarm extends Component {
 
     NextQuestion = () => {
         const {allQuestions, progress} = this.state;
-
-        this.setState({
-          loadNextQuestion: true,
-        })
+        
+        setTimeout(()=>{
+            this.setState({
+                loadNextQuestion: true,
+            })
+        },300)
         
         setTimeout(()=>{
           if(progress < allQuestions.length - 1){
@@ -103,7 +105,7 @@ export default class CreateAlarm extends Component {
               showDetails: true,
             })
           }
-        }, 500)
+        }, 600)
 
         if(progress === 2){
             this.findTraffic()
@@ -126,17 +128,21 @@ export default class CreateAlarm extends Component {
     }
 
     render() {
-        const {currentQuestion, showDetails, allQuestions, allAnswers, error, trafficResults} = this.state;
+        const {currentQuestion, showDetails, allQuestions, allAnswers, error, trafficResults, loadNextQuestion, progress} = this.state;
         const {handleSetAlarm} = this.props;
 
         return (
             <div className='alarm-form'>
-                <ProgressBar/>
+                <ProgressBar allQuestions={allQuestions}
+                             allAnswers={allAnswers}
+                             progress={progress}
+                />
                 <div className='content'>               
                     {
                     !showDetails ? <Question
                         currentQuestion={currentQuestion}
                         selectElementType={this.selectElementType}
+                        loadNextQuestion={loadNextQuestion}
                     />
                     :
                     <Details allQuestions={allQuestions}

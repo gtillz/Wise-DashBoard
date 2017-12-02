@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './styles/App.css';
 import './styles/Alarm.css';
+import '../node_modules/react-activity/dist/react-activity.css'
 
 import AlarmWidget from './js/components/Alarm/AlarmWidget';
+import {Sentry} from 'react-activity'
 
 const google = window.google;
 
@@ -11,6 +13,7 @@ class App extends Component {
     super();
     
     this.state= {
+      isActive: false,
       currentLocation: {
         city: '',
         lat:  '',
@@ -29,9 +32,10 @@ class App extends Component {
       const google_maps_geocoder = new google.maps.Geocoder();
       
       google_maps_geocoder.geocode({ 'latLng': google_map_position }, (results) => {
-        const city = `${results[0].address_components[2].long_name}, ${results[0].address_components[5].short_name}`
+        const city = `${results[0].address_components[2].long_name}, ${results[0].address_components[5].short_name}` || null;
         
         this.setState({
+          isActive: true,
           currentLocation: {
             city: city,
             lat: lat,
@@ -43,7 +47,7 @@ class App extends Component {
   }
    
   render() {
-    const {currentLocation} = this.state;
+    const {currentLocation, isActive} = this.state;
     const isLoadingLocation = currentLocation.city === '';
     const {city} = currentLocation;
     return (
@@ -51,12 +55,21 @@ class App extends Component {
           <div className="container-fluid bg-image">
             <div className='row'>
               <div className='col'>
-                <h1>Wise</h1>
-                <label>{isLoadingLocation ? 'Loading...' : city}</label>
+                <h1 className='app-logo'>Wise</h1>
+                <div className='app-location-container'>
+                  { isLoadingLocation ?
+                    <Sentry color="#FFFFFF" size={32} speed={1} />
+                  :
+                  <i className="fa fa-map-marker fa-5x app-location-icon" aria-hidden="true"></i>
+                  }
+                  <span className='app-location'>{isLoadingLocation ? `Locating...` : city}</span>
+                </div>
               </div>
             </div> 
           </div>
-          <AlarmWidget currentLocation={currentLocation}/>
+          <AlarmWidget currentLocation={currentLocation}
+                       isActive={isActive}
+          />
       </div>
     );
   }

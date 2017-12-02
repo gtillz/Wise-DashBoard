@@ -11,20 +11,28 @@ export default class AlarmWidget extends Component {
     this.state = {
       alarms: [],
       createAlarm: false,
-      localTime: this.clock(),
+      localTime: {
+        LT: moment(moment(), ["h:mm A"]).format("h:mm"),
+        ampm: moment(moment(), ["h:mm A"]).format("a")
+      },
       date: moment().format('LL')
     };
   };
 
-  componentDidUpdate() {
+  
+  componentWillMount() {
     this.clock();
   }
   
   clock = ()=> {
+    let now = moment();
     setTimeout(()=>{
       this.setState({
-        localTime: moment().format('LT')
-      })
+        localTime: {
+          LT: moment(now, ["h:mm A"]).format("h:mm"),
+          ampm: moment(now, ["h:mm A"]).format("a")
+      }
+      },this.clock())
     },500)
   }
 
@@ -49,14 +57,34 @@ export default class AlarmWidget extends Component {
   }
 
   handleAddAlarm = () => {
-    this.setState({
-      createAlarm: !this.state.createAlarm
+    const {isActive} = this.props;
+
+    if(isActive){
+      this.setState({
+        createAlarm: !this.state.createAlarm
+      })
+    } else {
+      alert('Internet Access Required')
+    }
+  }
+
+  handleDelete = (index)=> {
+    const {alarms} = this.state;
+    
+    const newAlarms = alarms.filter((alarm)=>{
+      return alarm !== alarms[index]
     })
+
+    this.setState({
+      alarms: newAlarms
+    })
+
   }
     
     render() {
       const {currentLocation} = this.props
       const {alarms, createAlarm, localTime, date} = this.state;
+      const {LT, ampm} = localTime;
 
         return (
         
@@ -66,13 +94,17 @@ export default class AlarmWidget extends Component {
               <div className='alarm-btn-add'>
                 <i className="fa fa-plus-square-o fa-lg" aria-hidden="true" onClick={this.handleAddAlarm}></i>
               </div>
-              <div className='time'>{localTime}</div>
+              <div className='time'>
+                <span>{LT}</span>
+                <span style={{fontSize: '0.6em'}}>{` ${ampm}`}</span>
+              </div>
               <div className='date'>{date}</div>
             </div>
 
             <AlarmList alarms={alarms} 
                        createAlarm={createAlarm}
                        handleAddAlarm={this.handleAddAlarm}
+                       handleDelete={this.handleDelete}
                        handleSetAlarm={this.handleSetAlarm}
                        currentLocation={currentLocation}
             />
@@ -85,4 +117,5 @@ export default class AlarmWidget extends Component {
 
 AlarmWidget.PropTypes = {
   currentLocation: PropTypes.object.isRequired,
+  isActive: PropTypes.bool.isRequired,
 }

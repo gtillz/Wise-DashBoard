@@ -72,7 +72,8 @@ export default class Arrival extends Component {
                             id='desiredArrival'
                             autoOk={ true }
                             minutesStep={ 5 }
-                            inputStyle={{ textAlign: 'center' }}
+                            inputStyle={{textAlign: 'center' }}
+                            textFieldStyle={{margin: '2em'}}
                             value={arvTime.initial}
                             onChange={this.handleTime}
                         />

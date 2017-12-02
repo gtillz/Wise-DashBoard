@@ -23,17 +23,17 @@ app.use(function (req, res, next) {
 let key = require('./key.js');
 let YOUR_API_KEY = key.GOOGLE_KEY;
 
-//initial API calls when alarm is set
-app.post('/setAlarm', (req, res) => {
+// === initial API calls when alarm is set ===
+app.post('/set', (req, res) => {
     const {currentLocation} = req.body;
     let callStr = req.body.currentLocation.lat + ',' + req.body.currentLocation.lng + '&destinations=' + req.body.destination.lat + ',' + req.body.destination.lng + '&key=';
     let arvTime = req.body.ETA;
     let url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + callStr + YOUR_API_KEY;
-    // //request to get BallPark duration time
+    // === request to get BallPark duration time ===
     request(url, (err, resp, body) => {
         let durBP = (JSON.parse(body).rows[0].elements[0].duration.value);
         let DTc = arvTime - durBP
-    // //request for duration with traffic     
+    // === request for duration with traffic ===
         if (!err) {
             function traffic() {
                 let callStr = req.body.currentLocation.lat + ',' + req.body.currentLocation.lng + '&destinations=' + req.body.destination.lat + ',' + req.body.destination.lng + '&departure_time=' + DTc + '&key=';
@@ -58,7 +58,7 @@ app.post('/setAlarm', (req, res) => {
     })
 });
 
-//monitor traffic while alarm is set
+// === monitor traffic while alarm is set ===
 app.post('/checktraffic', (req,res)=>{
     let callStr = req.body.currentLocation.lat + ',' + req.body.currentLocation.lng + '&destinations=' + req.body.destination.lat + ',' + req.body.destination.lng + '&departure_time=now&key=';
     let url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=' + callStr + YOUR_API_KEY;
@@ -73,6 +73,6 @@ app.post('/checktraffic', (req,res)=>{
 });
 
 app.listen(PORT, () => {
-    console.log('Is there anybody out there?!')
-    console.log('Cache Rules Everything Around Me!')
+    console.log(`Anyone listening on ${PORT}?!`)
+
 })

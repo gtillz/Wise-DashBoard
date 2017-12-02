@@ -62,7 +62,7 @@ export default class Destination extends Component {
                             floatingLabelText='Destination'
                             id='destination'
                             placeholder=''
-                            style={{width: '75%'}}  
+                            style={{margin: '0.5em', width: '75%'}}  
                         /><br />
                     </div>
                 </MuiThemeProvider>

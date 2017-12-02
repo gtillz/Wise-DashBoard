@@ -4,7 +4,10 @@ import PropTypes from 'prop-types'
 import AlarmCard from './AlarmCard'
 import CreateAlarm from './createAlarm/CreateAlarm'
 
-function AlarmList({alarms, createAlarm, handleAddAlarm, currentLocation, handleSetAlarm}) {
+function AlarmList({alarms, createAlarm, handleAddAlarm, currentLocation, handleSetAlarm, handleDelete}) {
+    let sortAlarms = alarms.sort((a,b)=>{
+        return (a.time - b.time)
+    })
     return (
         <div className='col-md-8 scrollable'>
             <div className='row'>
@@ -17,8 +20,8 @@ function AlarmList({alarms, createAlarm, handleAddAlarm, currentLocation, handle
                 :
                 
                   alarms.length !== 0 ?
-                    alarms.map((alarm, index )=> {
-                    return <AlarmCard key={index} index={index} alarms={alarms}/> 
+                    sortAlarms.map((alarm, index)=> {
+                    return <AlarmCard key={index} index={index} alarms={alarms} handleDelete={handleDelete}/> 
                   })
 
                   :
@@ -40,6 +43,7 @@ AlarmList.PropTypes = {
     alarms: PropTypes.array.isRequired,
     createAlarm: PropTypes.bool.isRequired,
     handleAddAlarm: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
     handleSetAlarm: PropTypes.func.isRequired,
     currentLocation: PropTypes.object.isRequired,
 }
