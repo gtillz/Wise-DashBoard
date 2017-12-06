@@ -6,6 +6,21 @@ import '../node_modules/react-activity/dist/react-activity.css'
 import AlarmWidget from './js/components/Alarm/AlarmWidget';
 import {Sentry} from 'react-activity'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {white, blueGrey50, blueGrey300, deepOrange300, deepOrange700} from 'material-ui/styles/colors';
+
+const muiTheme = getMuiTheme({
+  palette: {
+      textColor: white,
+      primary1Color: deepOrange300,
+      pickerHeaderColor: deepOrange300,
+      canvasColor: blueGrey50,
+      clockCircleColor: blueGrey300,
+      headerColor: deepOrange700
+  },
+});
+
 const google = window.google;
 
 class App extends Component {
@@ -52,6 +67,7 @@ class App extends Component {
     const {city} = currentLocation;
     return (
       <div>
+        <MuiThemeProvider muiTheme={muiTheme}>
           <div className="container-fluid bg-image">
             <div className='row'>
               <div className='col'>
@@ -60,7 +76,7 @@ class App extends Component {
                   { isLoadingLocation ?
                     <Sentry color="#FFFFFF" size={32} speed={1} />
                   :
-                  <i className="fa fa-map-marker fa-5x app-location-icon" aria-hidden="true"></i>
+                    <i className="fa fa-map-marker fa-5x app-location-icon" aria-hidden="true"></i>
                   }
                   <span className='app-location'>{isLoadingLocation ? `Locating...` : city}</span>
                 </div>
@@ -70,6 +86,7 @@ class App extends Component {
           <AlarmWidget currentLocation={currentLocation}
                        isActive={isActive}
           />
+        </MuiThemeProvider>
       </div>
     );
   }

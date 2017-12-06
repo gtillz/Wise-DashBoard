@@ -1,23 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {white} from 'material-ui/styles/colors';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 import TextField from 'material-ui/TextField';
-
-// import axios from 'axios'
 
 let google = window.google || null;
 
-const muiTheme = getMuiTheme({
-    palette: {
-      textColor: white,
-      primary1Color: white
-    },
-  });
-
-export default class Destination extends Component {
+class Destination extends Component {
     constructor(){
         super();
 
@@ -54,18 +43,17 @@ export default class Destination extends Component {
     render() {
         return (
             <div>
-                <MuiThemeProvider muiTheme={muiTheme}>
                     <div>
                         <TextField
                             name='destination'
                             hintText="Ex. your work address"
                             floatingLabelText='Destination'
+                            floatingLabelStyle={{color:'white'}}
                             id='destination'
                             placeholder=''
                             style={{margin: '0.5em', width: '75%'}}  
                         /><br />
                     </div>
-                </MuiThemeProvider>
             </div>
         )
     }
@@ -76,3 +64,5 @@ Destination.PropTypes = {
     currentLocation: PropTypes.object.isRequired,
 
 }
+
+export default muiThemeable()(Destination);

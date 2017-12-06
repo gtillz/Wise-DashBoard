@@ -114,7 +114,6 @@ export default class CreateAlarm extends Component {
     }
 
     clearState = ()=> {
-        console.log('clearing state')
         this.setState({
             allAnswers: [],
             allQuestions: data.allQuestions,
@@ -129,7 +128,7 @@ export default class CreateAlarm extends Component {
 
     render() {
         const {currentQuestion, showDetails, allQuestions, allAnswers, error, trafficResults, loadNextQuestion, progress} = this.state;
-        const {handleSetAlarm} = this.props;
+        const {handleSetAlarm, alarms} = this.props;
 
         return (
             <div className='alarm-form'>
@@ -145,7 +144,9 @@ export default class CreateAlarm extends Component {
                         loadNextQuestion={loadNextQuestion}
                     />
                     :
-                    <Details allQuestions={allQuestions}
+                    <Details 
+                             alarms={alarms}
+                             allQuestions={allQuestions}
                              allAnswers={allAnswers}
                              handleSetAlarm={handleSetAlarm}
                              error={error}
@@ -163,6 +164,7 @@ export default class CreateAlarm extends Component {
 }
 
 CreateAlarm.propTypes = {
+    alarms: PropTypes.array.isRequired,
     createAlarm: PropTypes.bool.isRequired,
     handleSetAlarm: PropTypes.func.isRequired,
     currentLocation: PropTypes.object.isRequired,

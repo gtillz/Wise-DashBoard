@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
+import song from '../../../images/kygo-piano-jam-1.mp3'
+
 import AlarmList from './AlarmList'
 
 export default class AlarmWidget extends Component {
@@ -15,7 +17,7 @@ export default class AlarmWidget extends Component {
         LT: moment(moment(), ["h:mm A"]).format("h:mm"),
         ampm: moment(moment(), ["h:mm A"]).format("a")
       },
-      date: moment().format('LL')
+      isPlaying: false,
     };
   };
 
@@ -23,6 +25,32 @@ export default class AlarmWidget extends Component {
   componentWillMount() {
     this.clock();
   }
+
+  
+  componentDidUpdate() {
+    const {alarms, isPlaying} = this.state;
+    const now = moment().format('LLLL');
+    const alarm = document.getElementById('alarm');
+    
+    if(isPlaying){
+      alarm.play();
+    } else {
+      alarm.load();
+      alarm.pause();
+    }
+
+    if(alarms.length > 0){
+      alarms.forEach((alarm)=>{
+        const wakeUp = moment.unix(alarm.time).format('LLLL')
+        if (wakeUp === now){
+          this.setState({
+            isPlaying: true
+          })
+        }
+      })
+    }
+  }
+  
   
   clock = ()=> {
     let now = moment();
@@ -64,13 +92,14 @@ export default class AlarmWidget extends Component {
         createAlarm: !this.state.createAlarm
       })
     } else {
-      alert('Internet Access Required')
+      this.setState({
+        createAlarm: false
+      })
     }
   }
 
   handleDelete = (index)=> {
     const {alarms} = this.state;
-    
     const newAlarms = alarms.filter((alarm)=>{
       return alarm !== alarms[index]
     })
@@ -80,14 +109,20 @@ export default class AlarmWidget extends Component {
     })
 
   }
+
+  handlePlayStop = ()=> {
+    this.setState({
+      isPlaying: !this.state.isPlaying
+    })
+  }
     
     render() {
       const {currentLocation} = this.props
-      const {alarms, createAlarm, localTime, date} = this.state;
+      const {alarms, createAlarm, localTime} = this.state;
       const {LT, ampm} = localTime;
-
-        return (
+      const date = moment().format('LL')
         
+      return (
         <div className="container-fluid">
           <div className='row scrollable'>
             <div className='col-md-4 alarm-main'>
@@ -110,6 +145,9 @@ export default class AlarmWidget extends Component {
             />
 
           </div>
+          <audio id='alarm' loop>
+            <source src={song} type="audio/mpeg"/>
+          </audio>
         </div>
         )
     }

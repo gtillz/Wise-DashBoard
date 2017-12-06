@@ -13,12 +13,12 @@ function AlarmList({alarms, createAlarm, handleAddAlarm, currentLocation, handle
             <div className='row'>
                 {
                  createAlarm ? <CreateAlarm
+                                    alarms={alarms}
                                     createAlarm={createAlarm}
                                     handleSetAlarm={handleSetAlarm}
                                     currentLocation={currentLocation}
                                 />
                 :
-                
                   alarms.length !== 0 ?
                     sortAlarms.map((alarm, index)=> {
                     return <AlarmCard key={index} index={index} alarms={alarms} handleDelete={handleDelete}/> 

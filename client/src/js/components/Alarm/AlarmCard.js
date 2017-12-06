@@ -16,7 +16,7 @@ function AlarmCard({alarms, index, handleDelete}) {
             <div className='time'>
                 <span>{moment.unix(wakeUp, ["h:mm A"]).format("h:mm")}</span>
                 <span style={{fontSize: '0.4em'}}> {moment.unix(wakeUp, ["h:mm A"]).format("a")}</span>
-            </div>  
+            </div>
             <div className='details'>
                 <span id='traffic'>Traffic: {trafficConditions}</span><br/>
                 <span id='departure'>Leave by: {moment.unix(departure).format('LT')}</span>

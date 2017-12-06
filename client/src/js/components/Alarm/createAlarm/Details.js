@@ -3,9 +3,14 @@ import PropTypes from 'prop-types'
 
 import moment from 'moment'
 
+import muiThemeable from 'material-ui/styles/muiThemeable';
+import RaisedButton from 'material-ui/RaisedButton';
 
+const style = {
+    margin: 12
+}
 
-export default class Details extends Component {
+class Details extends Component {
 
     selectDetailElement = (elementType) => {
         const {allAnswers} = this.props;
@@ -41,11 +46,11 @@ export default class Details extends Component {
     }
 
     render() {
-        const {allQuestions, error, trafficResults} = this.props;
+        const {allQuestions, error, trafficResults, alarms, clearState} = this.props;
         const isDisabled = error || this.isEmpty(trafficResults);
         return (
             <div>
-                <h5>Alarm Details</h5>
+                <h5 style={{color: this.props.muiTheme.palette.headerColor}}>{<span>{moment(alarms.length + 1, ['DDD']).format('DDDo')}</span>} Alarm Details</h5>
                 <ol>
                     {
                         !error ?
@@ -56,17 +61,25 @@ export default class Details extends Component {
                         <p>Oops... Something went wrong.</p>
                     }
                 </ol>
-                <button className='btn btn-secondary' onClick={this.onSubmit} disabled={isDisabled}>Set Alarm</button>
+                
+                { !error ?
+                    <RaisedButton label={'Set Alarm'} primary={true} onClick={this.onSubmit} disabled={isDisabled}/>
+                    :
+                    <RaisedButton label={'Try Again'} primary={true} onClick={clearState} style={style}/>
+                }
             </div>
         )
     }
 }
 
 Details.propTypes = {
+    alarms: PropTypes.array.isRequired,
     allQuestions:   PropTypes.array.isRequired,
     handleSetAlarm: PropTypes.func.isRequired,
     error: PropTypes.bool.isRequired,
     trafficResults: PropTypes.object,
     clearState: PropTypes.func.isRequired,
 }
+
+export default muiThemeable()(Details);
 
