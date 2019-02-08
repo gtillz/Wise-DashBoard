@@ -20,8 +20,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-let key = require('./key.js');
-let YOUR_API_KEY = key.GOOGLE_KEY;
+// let key = require('./key.js');
+let YOUR_API_KEY = 'AIzaSyDur1ya7xGZhRosgBjx-ls7d7OZLqYf9KE';
 
 // === initial API calls when alarm is set ===
 app.post('/set', (req, res) => {
